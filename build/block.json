@@ -3,9 +3,9 @@
   "apiVersion": 3,
   "name": "create-block/team-member-block",
   "version": "0.1.0",
-  "title": "Team Member Block",
-  "category": "widgets",
-  "icon": "smiley",
+  "title": "Team Member Blcok",
+  "category": "text",
+  "icon": "groups",
   "description": "Example block written with ESNext standard and JSX support – build step required.",
   "supports": {
     "html": false

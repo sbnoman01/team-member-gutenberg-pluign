@@ -1,0 +1,48 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-team-member-block{
+	display: block;
+	@for $i from 1 through 6{
+		&.has-#{$i}-columns{
+			> .block-editor-inner-blocks > .block-editor-block-list__layout > [data-type="create-block/single-team"]{
+				width: calc( 100% / #{$i});
+			}
+		}
+	}
+	>.block-editor-inner-blocks >.block-editor-block-list__layout{
+		display: flex;
+		flex-wrap: wrap;
+
+		[data-type="create-block/single-team"]{
+			margin: 0;
+			max-width: none;
+			.team-member-thumbnail{
+				position: relative;
+				&.is-loading{
+					img{
+						opacity: .3;
+					}
+					.components-spinner{
+						position: absolute;
+						top: 40%;
+						left: 0;
+						right: 0;
+						margin: 0 auto;
+					}
+				}
+
+			}
+		}
+	}
+}
+.team-member-thumbnail.is-loading .component-spinner {
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}

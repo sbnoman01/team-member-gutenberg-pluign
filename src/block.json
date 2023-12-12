@@ -1,16 +1,16 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
-	"name": "create-block/boilerplate",
+	"name": "create-block/team-member-block",
 	"version": "0.1.0",
-	"title": "Boilerplate",
-	"category": "widgets",
-	"icon": "smiley",
+	"title": "Team Member Blcok",
+	"category": "text",
+	"icon": "groups",
 	"description": "Example block written with ESNext standard and JSX support – build step required.",
 	"supports": {
 		"html": false
 	},
-	"textdomain": "boilerplate",
+	"textdomain": "team-member",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

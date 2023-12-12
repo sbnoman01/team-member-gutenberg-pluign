@@ -1,10 +1,18 @@
-import { __ } from '@wordpress/i18n';
-import { useBlockProps } from '@wordpress/block-editor';
+// import { __ } from '@wordpress/i18n';
+import {
+	useBlockProps,
+	InnerBlocks
+} from '@wordpress/block-editor';
 
-export default function save() {
+export default function save({ attributes }) {
+	// distructure the columns
+	const { columns } = attributes;
+
 	return (
-		<p {...useBlockProps.save()}>
-			{__('Hi demo block!', 'boilerplate')}
-		</p>
+		<div {...useBlockProps.save({
+			className: `has-${columns}-columns`
+		})}>
+			<InnerBlocks.Content />
+		</div>
 	);
 }

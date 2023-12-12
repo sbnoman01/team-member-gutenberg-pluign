@@ -5,8 +5,19 @@
  * Replace them with your own styles or remove the file completely.
  */
 
-.wp-block-create-block-boilerplate {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+.wp-block-create-block-team-member-block{
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	@for $i from 1 through 6{
+		&.has-#{$i}-columns{
+			.wp-block-create-block-single-team{
+				width: calc( 100% / #{$i} - #{$i}0px);
+			}
+		}
+	}
+	.wp-block-create-block-single-team{
+		background-color: antiquewhite;
+		padding: 10px;
+	}
 }

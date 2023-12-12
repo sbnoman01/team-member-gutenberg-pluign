@@ -7,10 +7,32 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-create-block-boilerplate {
-  background-color: #21759b;
-  color: #fff;
-  padding: 2px;
+.wp-block-create-block-team-member-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.wp-block-create-block-team-member-block.has-1-columns .wp-block-create-block-single-team {
+  width: calc(100% / 1 - 10px);
+}
+.wp-block-create-block-team-member-block.has-2-columns .wp-block-create-block-single-team {
+  width: calc(100% / 2 - 20px);
+}
+.wp-block-create-block-team-member-block.has-3-columns .wp-block-create-block-single-team {
+  width: calc(100% / 3 - 30px);
+}
+.wp-block-create-block-team-member-block.has-4-columns .wp-block-create-block-single-team {
+  width: calc(100% / 4 - 40px);
+}
+.wp-block-create-block-team-member-block.has-5-columns .wp-block-create-block-single-team {
+  width: calc(100% / 5 - 50px);
+}
+.wp-block-create-block-team-member-block.has-6-columns .wp-block-create-block-single-team {
+  width: calc(100% / 6 - 60px);
+}
+.wp-block-create-block-team-member-block .wp-block-create-block-single-team {
+  background-color: antiquewhite;
+  padding: 10px;
 }
 
 /*# sourceMappingURL=style-index.css.map*/
