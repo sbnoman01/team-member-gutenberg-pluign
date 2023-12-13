@@ -7,9 +7,10 @@ import {
 export default function save({attributes}) {
 
 	// distruct variables from attributes
-	const { name, bio } = attributes;
+	const { name, bio, mediaUrl, mediaAlt, mediaID } = attributes;
 	return (
 		<div {...useBlockProps.save()}>
+			{mediaUrl && <img src={mediaUrl} alt={mediaAlt} className={ mediaID ? `wp-image-${mediaID}` : null} />}
 			<RichText.Content
 				tagName='h4'
 				value={name}
