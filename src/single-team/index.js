@@ -39,6 +39,13 @@ registerBlockType('create-block/single-team', {
 			selector: "img",
 			attribute: "alt"
 		},
+		socialLinks: {
+			type: "array",
+			default: [
+				{ sLink: "https://facebook.com", sIcon: "facebook-alt"},
+				{ sLink: "https://instagram.com", sIcon: "instagram"}
+			]
+		}
 		
 	},
 	edit: Edit,

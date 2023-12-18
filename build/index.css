@@ -68,4 +68,21 @@
   margin: 0 auto;
 }
 
+.add__new_social {
+  margin-bottom: 10px;
+  display: inline;
+  border: 1px dotted;
+}
+
+.socialLinks ul {
+  display: flex;
+  gap: 8px;
+}
+.socialLinks ul li {
+  list-style: none;
+}
+.socialLinks ul li.link_selected button {
+  outline: 2px solid slateblue;
+}
+
 /*# sourceMappingURL=index.css.map*/

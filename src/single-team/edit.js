@@ -15,43 +15,54 @@ import {
 	ToolbarButton,
 	TextControl,
 	PanelBody,
-	SelectControl
+	SelectControl,
+	Icon
 } from "@wordpress/components"
+import { usePrevious } from "@wordpress/compose"
 import './editor.scss';
 import { isBlobURL, revokeBlobURL } from "@wordpress/blob"
 import { useSelect } from "@wordpress/data"
 
 
 
-function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
+function Edit({ attributes, setAttributes, noticeOperations, noticeUI, isSelected }) {
 
 	// distract vars from attributes
-	const { name, bio, mediaUrl, mediaID, mediaAlt } = attributes;
-	const [blobUrl, setBlobUrl] = useState();
+	const { name, bio, mediaUrl, mediaID, mediaAlt, socialLinks } = attributes;
 
-	const imageObj = useSelect( (select) => {
+	const [blobUrl, setBlobUrl] = useState();
+	const [selectedLink, setSelectedLink] = useState();
+	const [PrevIsSelected, setPrevIsSelected] = useState();
+
+
+	const imageObj = useSelect((select) => {
 		const { getMedia } = select("core");
 
 		return mediaID ? getMedia(mediaID) : null;
-	}, [mediaID] );
+	}, [mediaID]);
 
-	const mediaSizes = useSelect( (select) => {
+	const mediaSizes = useSelect((select) => {
 		return select(store).getSettings().imageSizes;
 	}, [])
-	
+
+	const addNewLinks = () => {
+		setAttributes({
+			socialLinks: [...socialLinks, {sLink: "https://twitter.com", sIcon: "wordpress"}]
+		})
+	}
 
 	// image size options
 	const getSizeOptions = () => {
-		if(!imageObj) return []
+		if (!imageObj) return []
 		const options = [];
 		const sizes = imageObj.media_details.sizes;
 
-		for ( const key in sizes){
+		for (const key in sizes) {
 			const size = sizes[key];
-			const mediaSize = mediaSizes.find( (s) => s.slug == key );
+			const mediaSize = mediaSizes.find((s) => s.slug == key);
 
-			if(mediaSize){
-				options.push( { 
+			if (mediaSize) {
+				options.push({
 					label: mediaSize.name,
 					value: size.source_url
 				});
@@ -61,8 +72,8 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 	}
 
 	// media size changes
-	const onMediaSizeChange = ( url ) => {
-		setAttributes( { mediaUrl: url });
+	const onMediaSizeChange = (url) => {
+		setAttributes({ mediaUrl: url });
 	};
 
 	// changing name
@@ -125,7 +136,7 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 
 	// changing alter text
 	const onAltChange = (altText) => {
-		setAttributes({ mediaAlt: altText})
+		setAttributes({ mediaAlt: altText })
 	}
 
 	// use effect
@@ -144,10 +155,16 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 		}
 	}, [mediaUrl])
 
+	useEffect( () => {
+		if(setPrevIsSelected && !PrevIsSelected){
+			setSelectedLink()
+		}
+	}, [PrevIsSelected, setPrevIsSelected]);
+
 	return (
 		<>
 
-			{ mediaUrl && 
+			{mediaUrl &&
 				<BlockControls group="inline">
 					<MediaReplaceFlow
 						onSelect={onMediaSelect}
@@ -174,19 +191,19 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 					initialOpen
 				>
 					<TextControl
-						label={ __("Alt Text") }
-						placeholder={ __("Enter Place holder") }
+						label={__("Alt Text")}
+						placeholder={__("Enter Place holder")}
 						value={mediaAlt}
 						onChange={onAltChange}
 					/>
 				</PanelBody>
 
-				{ mediaID &&
+				{mediaID &&
 					<PanelBody
 						title='Media Sizes'
 					>
 						<SelectControl
-							onChange={ onMediaSizeChange }
+							onChange={onMediaSizeChange}
 							options={getSizeOptions()}
 							value={mediaUrl}
 						/>
@@ -230,6 +247,30 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 					value={bio}
 					onChange={onBioChange}
 				/>
+				<div className='socialLinks'>	
+					<ul>
+						{socialLinks.map((item, index) => {
+							return (
+								<li key={index} className={ selectedLink === index ? 'link_selected' : null }>
+									<button
+										onClick={ () => setSelectedLink(index)}
+									>
+										<Icon icon={item.sIcon} />
+									</button>
+								</li>
+							)
+						})}
+						{isSelected && 
+							<li 
+								className='add__new_social'
+								onClick={addNewLinks}
+							>
+								<Icon icon="plus" />
+							</li>
+						}
+						
+					</ul>
+				</div>
 			</div>
 		</>
 	);
