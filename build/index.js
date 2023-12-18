@@ -160,6 +160,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/single-team/editor.scss");
 /* harmony import */ var _wordpress_blob__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/blob */ "@wordpress/blob");
 /* harmony import */ var _wordpress_blob__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blob__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_7__);
+
 
 
 
@@ -182,6 +185,40 @@ function Edit({
     mediaAlt
   } = attributes;
   const [blobUrl, setBlobUrl] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)();
+  const imageObj = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
+    const {
+      getMedia
+    } = select("core");
+    return mediaID ? getMedia(mediaID) : null;
+  }, [mediaID]);
+  const mediaSizes = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_7__.useSelect)(select => {
+    return select(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.store).getSettings().imageSizes;
+  }, []);
+
+  // image size options
+  const getSizeOptions = () => {
+    if (!imageObj) return [];
+    const options = [];
+    const sizes = imageObj.media_details.sizes;
+    for (const key in sizes) {
+      const size = sizes[key];
+      const mediaSize = mediaSizes.find(s => s.slug == key);
+      if (mediaSize) {
+        options.push({
+          label: mediaSize.name,
+          value: size.source_url
+        });
+      }
+    }
+    return options;
+  };
+
+  // media size changes
+  const onMediaSizeChange = url => {
+    setAttributes({
+      mediaUrl: url
+    });
+  };
 
   // changing name
   const onNameChange = newName => {
@@ -199,7 +236,6 @@ function Edit({
 
   // uploading image from media
   const onMediaSelect = media => {
-    console.log(media);
     if (media && media.url) {
       setAttributes({
         mediaUrl: media.url,
@@ -292,6 +328,12 @@ function Edit({
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Enter Place holder"),
     value: mediaAlt,
     onChange: onAltChange
+  })), mediaID && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+    title: "Media Sizes"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.SelectControl, {
+    onChange: onMediaSizeChange,
+    options: getSizeOptions(),
+    value: mediaUrl
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.useBlockProps)()
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -510,6 +552,16 @@ module.exports = window["wp"]["blocks"];
 /***/ ((module) => {
 
 module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ ((module) => {
+
+module.exports = window["wp"]["data"];
 
 /***/ }),
 

@@ -6,17 +6,20 @@ import {
 	MediaPlaceholder,
 	BlockControls,
 	MediaReplaceFlow,
-	InspectorControls
+	InspectorControls,
+	store
 } from '@wordpress/block-editor';
 import {
 	Spinner,
 	withNotices,
 	ToolbarButton,
 	TextControl,
-	PanelBody
+	PanelBody,
+	SelectControl
 } from "@wordpress/components"
 import './editor.scss';
 import { isBlobURL, revokeBlobURL } from "@wordpress/blob"
+import { useSelect } from "@wordpress/data"
 
 
 
@@ -26,6 +29,41 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 	const { name, bio, mediaUrl, mediaID, mediaAlt } = attributes;
 	const [blobUrl, setBlobUrl] = useState();
 
+	const imageObj = useSelect( (select) => {
+		const { getMedia } = select("core");
+
+		return mediaID ? getMedia(mediaID) : null;
+	}, [mediaID] );
+
+	const mediaSizes = useSelect( (select) => {
+		return select(store).getSettings().imageSizes;
+	}, [])
+	
+
+	// image size options
+	const getSizeOptions = () => {
+		if(!imageObj) return []
+		const options = [];
+		const sizes = imageObj.media_details.sizes;
+
+		for ( const key in sizes){
+			const size = sizes[key];
+			const mediaSize = mediaSizes.find( (s) => s.slug == key );
+
+			if(mediaSize){
+				options.push( { 
+					label: mediaSize.name,
+					value: size.source_url
+				});
+			}
+		}
+		return options;
+	}
+
+	// media size changes
+	const onMediaSizeChange = ( url ) => {
+		setAttributes( { mediaUrl: url });
+	};
 
 	// changing name
 	const onNameChange = (newName) => {
@@ -39,7 +77,6 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 
 	// uploading image from media
 	const onMediaSelect = (media) => {
-		console.log(media);
 		if (media && media.url) {
 			setAttributes({
 				mediaUrl: media.url,
@@ -143,6 +180,18 @@ function Edit({ attributes, setAttributes, noticeOperations, noticeUI }) {
 						onChange={onAltChange}
 					/>
 				</PanelBody>
+
+				{ mediaID &&
+					<PanelBody
+						title='Media Sizes'
+					>
+						<SelectControl
+							onChange={ onMediaSizeChange }
+							options={getSizeOptions()}
+							value={mediaUrl}
+						/>
+					</PanelBody>
+				}
 			</InspectorControls>
 			<div {...useBlockProps()}>
 				<div
